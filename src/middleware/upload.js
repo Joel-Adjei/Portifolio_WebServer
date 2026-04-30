@@ -6,6 +6,7 @@ const storage = multerStorageCloudinary({
   cloudinary,
   params: {
     folder: "portfolio/projects",
+    public_id: (req, file) => `${file.fieldname}-${Date.now()}`,
     allowed_formats: ["jpg", "jpeg", "png", "webp", "gif"],
     transformation: [{ quality: "auto", fetch_format: "auto" }],
   },
