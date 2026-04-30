@@ -1,10 +1,6 @@
-/**
- * Run once to create the initial admin account:
- *   node src/scripts/seedAdmin.js
- */
-require("dotenv").config({ path: require("path").resolve(__dirname, "../../.env") });
-const mongoose = require("mongoose");
-const Admin = require("../models/Admin");
+import "dotenv/config";
+import mongoose from "mongoose";
+import Admin from "../models/Admin.js";
 
 (async () => {
   await mongoose.connect(process.env.MONGO_URI);

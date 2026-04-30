@@ -1,6 +1,6 @@
-const jwt = require("jsonwebtoken");
-const { validationResult } = require("express-validator");
-const Admin = require("../models/Admin");
+import jwt from "jsonwebtoken";
+import { validationResult } from "express-validator";
+import Admin from "../models/Admin.js";
 
 const signToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -23,7 +23,6 @@ const login = async (req, res) => {
 };
 
 const logout = (_req, res) => {
-  // JWT is stateless; client should discard the token.
   res.json({ message: "Logged out successfully" });
 };
 
@@ -33,4 +32,4 @@ const getMe = async (req, res) => {
   res.json({ admin });
 };
 
-module.exports = { login, logout, getMe };
+export { login, logout, getMe };
