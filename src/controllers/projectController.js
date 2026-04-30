@@ -11,7 +11,7 @@ const publicIdFromUrl = (url) => {
 
 const deleteFromCloudinary = async (url) => {
   const publicId = publicIdFromUrl(url);
-  if (publicId) await cloudinary.uploader.destroy(publicId);
+  if (publicId) await cloudinary.v2.uploader.destroy(publicId);
 };
 
 const getAllProjects = async (_req, res) => {
@@ -141,4 +141,10 @@ const deleteProject = async (req, res) => {
   res.json({ message: "Project deleted successfully" });
 };
 
-export { getAllProjects, getProject, createProject, updateProject, deleteProject };
+export {
+  getAllProjects,
+  getProject,
+  createProject,
+  updateProject,
+  deleteProject,
+};
