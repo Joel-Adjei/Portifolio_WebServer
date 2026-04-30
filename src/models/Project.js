@@ -1,12 +1,12 @@
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const projectSchema = new mongoose.Schema(
   {
     title: { type: String, required: true, trim: true },
     description: { type: String, required: true },
     longDescription: { type: String, required: true },
-    image: { type: String, required: true },          // Cloudinary URL
-    images: [{ type: String }],                        // Additional Cloudinary URLs
+    image: { type: String, required: true },
+    images: [{ type: String }],
     videoUrl: { type: String },
     technologies: [{ type: String, required: true }],
     date: { type: String, required: true },
@@ -21,4 +21,4 @@ const projectSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-module.exports = mongoose.model("Project", projectSchema);
+export default mongoose.model("Project", projectSchema);

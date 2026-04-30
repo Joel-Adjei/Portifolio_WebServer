@@ -1,14 +1,16 @@
-const router = require("express").Router();
-const { body } = require("express-validator");
-const {
+import { Router } from "express";
+import { body } from "express-validator";
+import {
   getAllProjects,
   getProject,
   createProject,
   updateProject,
   deleteProject,
-} = require("../controllers/projectController");
-const { protect } = require("../middleware/auth");
-const upload = require("../middleware/upload");
+} from "../controllers/projectController.js";
+import { protect } from "../middleware/auth.js";
+import upload from "../middleware/upload.js";
+
+const router = Router();
 
 const projectFields = upload.fields([
   { name: "image", maxCount: 1 },
@@ -27,13 +29,11 @@ const projectValidation = [
     .withMessage("Type must be development or design"),
 ];
 
-// Public
 router.get("/", getAllProjects);
 router.get("/:id", getProject);
 
-// Protected
 router.post("/", protect, projectFields, projectValidation, createProject);
 router.put("/:id", protect, projectFields, projectValidation, updateProject);
 router.delete("/:id", protect, deleteProject);
 
-module.exports = router;
+export default router;

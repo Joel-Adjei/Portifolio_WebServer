@@ -1,14 +1,11 @@
-const { validationResult } = require("express-validator");
-const Project = require("../models/Project");
-const cloudinary = require("../config/cloudinary");
-
-// ── helpers ──────────────────────────────────────────────────────────────────
+import { validationResult } from "express-validator";
+import Project from "../models/Project.js";
+import cloudinary from "../config/cloudinary.js";
 
 const publicIdFromUrl = (url) => {
-  // Extract Cloudinary public_id from a secure URL
   const parts = url.split("/upload/");
   if (parts.length < 2) return null;
-  const withVersion = parts[1]; // e.g. "v1234/portfolio/projects/abc.jpg"
+  const withVersion = parts[1];
   return withVersion.replace(/^v\d+\//, "").replace(/\.[^/.]+$/, "");
 };
 
@@ -16,8 +13,6 @@ const deleteFromCloudinary = async (url) => {
   const publicId = publicIdFromUrl(url);
   if (publicId) await cloudinary.uploader.destroy(publicId);
 };
-
-// ── controllers ──────────────────────────────────────────────────────────────
 
 const getAllProjects = async (_req, res) => {
   const projects = await Project.find().sort({ createdAt: -1 });
@@ -104,13 +99,11 @@ const updateProject = async (req, res) => {
     videoUrl,
   } = req.body;
 
-  // Replace cover image if a new one was uploaded
   if (req.files?.image?.[0]) {
     await deleteFromCloudinary(project.image);
     project.image = req.files.image[0].path;
   }
 
-  // Replace gallery images if new ones were uploaded
   if (req.files?.images?.length) {
     for (const url of project.images) await deleteFromCloudinary(url);
     project.images = req.files.images.map((f) => f.path);
@@ -141,7 +134,6 @@ const deleteProject = async (req, res) => {
   const project = await Project.findById(req.params.id);
   if (!project) return res.status(404).json({ message: "Project not found" });
 
-  // Clean up Cloudinary assets
   await deleteFromCloudinary(project.image);
   for (const url of project.images) await deleteFromCloudinary(url);
 
@@ -149,10 +141,4 @@ const deleteProject = async (req, res) => {
   res.json({ message: "Project deleted successfully" });
 };
 
-module.exports = {
-  getAllProjects,
-  getProject,
-  createProject,
-  updateProject,
-  deleteProject,
-};
+export { getAllProjects, getProject, createProject, updateProject, deleteProject };
