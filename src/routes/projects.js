@@ -8,19 +8,22 @@ import {
   deleteProject,
 } from "../controllers/projectController.js";
 import { protect } from "../middleware/auth.js";
-import upload from "../middleware/upload.js";
+// import upload from "../middleware/upload.js";
 
 const router = Router();
 
-const projectFields = upload.fields([
-  { name: "image", maxCount: 1 },
-  { name: "images", maxCount: 10 },
-]);
+// Commented out: Admin now provides image URLs directly
+// const projectFields = upload.fields([
+//   { name: "image", maxCount: 1 },
+//   { name: "images", maxCount: 10 },
+// ]);
 
 const projectValidation = [
   body("title").notEmpty().withMessage("Title is required"),
   body("description").notEmpty().withMessage("Description is required"),
-  body("longDescription").notEmpty().withMessage("Long description is required"),
+  body("longDescription")
+    .notEmpty()
+    .withMessage("Long description is required"),
   body("date").notEmpty().withMessage("Date is required"),
   body("client").notEmpty().withMessage("Client is required"),
   body("category").notEmpty().withMessage("Category is required"),
@@ -32,8 +35,8 @@ const projectValidation = [
 router.get("/", getAllProjects);
 router.get("/:id", getProject);
 
-router.post("/", protect, projectFields, projectValidation, createProject);
-router.put("/:id", protect, projectFields, projectValidation, updateProject);
+router.post("/", protect, projectValidation, createProject);
+router.put("/:id", protect, projectValidation, updateProject);
 router.delete("/:id", protect, deleteProject);
 
 export default router;
